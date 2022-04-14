@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <form>
+            <div>
+                <label for="user">账户:</label>
+                <input type="text" v-model="user" id="user">
+            </div><br>
+
+            <div>
+                <label for="pwd">密码:</label>
+                <input type="password" v-model="pwd" id="pwd">
+            </div><br>
+
+            <div>
+                <label for="pwd">年龄:</label>
+                <!-- 用数字修饰符控制 vuemodel.number-->
+                <input type="number" v-model.number="age" id="age">
+            </div><br>
+
+
+            <div>
+                性别: 
+                <label for="m">男</label>
+                <input type="radio" id="m" name="sex" v-model="sex" value="m"> 
+                <label for="f"> 女</label>
+                <input id="f" type="radio" name="sex" v-model="sex" value="f">
+            </div><br>
+
+            <div>
+                爱好: <br>
+                唱歌<input type="checkbox" id="sing" value="sing" v-model="hobby" name="hobby">
+                跳舞<input type="checkbox" id="dance" value="dance" v-model="hobby" name="hobby">
+                音乐<input type="checkbox" id="music" value="music" v-model="hobby" name="hobby">
+            </div><br>
+
+            <div>
+                所属校区:
+                <select v-model="dept"> 
+                    <option value="">请选择校区</option>
+                    <option value="beijing">北京</option>
+                    <option value="sahnghai">上海</option>
+                    <option value="shenzhen">深圳</option>
+                    <option value="guangzhou">广州</option>
+                </select>
+            </div><br>
+
+            <div>
+                <!-- lazy是在失去焦点的时候才收集值, trim去前后空格 -->
+                描述: <textarea v-model.lazy.trim="desc" id="" cols="30" rows="10"></textarea>
+            </div><br>
+            <div>
+                <input type="checkbox" v-model="agree" >阅读并接受《用户协议》
+            </div><br>
+            <div>
+                <button @click.prevent="confirm" >确定提交</button>
+            </div><br>
+        </form>
+
+    </div>
+</body>
+
+<script>
+    Vue.config.productionTip = false
+    new Vue({
+        el:'#app',
+        data() {
+            return {
+                user:'',
+                pwd:'',
+                age:'',
+                sex:'',
+                hobby:[],
+                dept:'',
+                desc:'',
+                agree:false
+            }
+        },
+        methods: {
+            confirm(){
+                console.log(JSON.stringify(this._data))
+            }
+        },
+    })
+</script>
+</html>
