@@ -7,8 +7,40 @@
 </head>
 <body>
     <div id="root">
-        <h2>学校名称{{name}}</h2>
-        <h2>school address {{address}}</h2>
+        <div> <button @click="numOfDept++">院校数量+1</button></div>
+        <div><button @click="addCondition">添加条件</button></div>
+        <div>   <button @click="addDept">在最上边添加院校</button><input type="text" v-model="newDept" /> </div>
+        <div><button @click="dept.subDept.shift()">删除最上边的院校</button></div>
+        <div><button @click="addPresident">添加一位校长</button></div>
+        <div> <button @click="editPresidentAge">修改第一位校长的年龄为50</button></div>
+        <div> <button @click="updateHobby">修改第一个学院为Wan Chai</button></div>
+        <div><button @click="filterTY">过滤Tsing yi院校</button></div>
+        
+       
+      
+
+
+
+        <h2>学校名称{{dept.name}}</h2>
+        <h2>school address {{dept.address}}</h2>
+
+        <!-- 计算属性 监听属性展示-->
+        <div >院校数量:{{numOfDept}}</div>
+
+        <h2 v-if="dept.condition">条件:{{dept.condition}}</h2>
+        <h2>子院校:
+            <ul>
+                <li v-for="sub in dept.subDept">{{sub}}</li>
+            </ul>
+        </h2>
+
+        <ul>
+            校长资料
+            <li v-for="president of dept.presidents">
+                name: {{president.name}},
+                age: {{president.age}}
+            </li>
+        </ul>
     </div>
 </body>
 
@@ -19,8 +51,79 @@
     const vm = new Vue({
         el:"#root",
         data:{
-            name:'abc',
-            address:'HK'
+            dept:{
+                name:'abc',
+                address:'HK',
+                subDept:['Tsing yi', 'Kwun Tong', 'Shem shui po', 'Mong Kok'],
+                presidents:[
+                    {name:'Wong',age:65},
+                    {name:'LUI',age:55}
+                ]          
+            },
+            newDept:'',
+            numOfDept:0
+            
+        },
+        methods: {
+            addCondition(){
+                //1. 不能往基础data添加, 2. 不能直接this.dept.condition = 'c1',因为忽略了数据代理, 没有getter和setter页面渲染不出来
+                Vue.set(this.dept, 'condition', 'c1');  
+            },
+            addPresident(){
+                //要用数组的7种方法修改, 不能直接加入(push, pop, shift, unshift, reverse, splice, sort)
+                this.dept.presidents.push({name:'KOK',age:88});
+            },
+            addDept(){
+                this.dept.subDept.push(this.newDept);
+                // this.dept.subDept = [...new Set(this.dept.subDept)] 去重数组
+            },
+            editPresidentAge(){
+                //直接拿数组 = {} 就会爆错, 但是拿到对象的属性, 就可以用数据代理了
+                this.dept.presidents[0].age = 50;
+            },
+            updateHobby(){
+                //用splice修改数组元素
+                // this.dept.subDept.splice(0,1,'Wan Chai');
+
+                //用set方法
+                // this.$set(this.dept.subDept, 0, 'Wan Chai 2');
+                Vue.set(this.dept.subDept, 0, 'Wan Chai 3');
+            },
+            filterTY(){
+                this.dept.subDept = this.dept.subDept.filter((h)=>{
+                    return h!== 'Tsing yi'
+                })
+            }
+        },
+        // computed:{
+        //     //只读不写
+        //     numOfDept:function(){
+        //         return this.dept.subDept.length;
+        //     }
+
+        //     //读写都有
+        //     numOfDept:{
+        //         get(){
+        //             return this.dept.subDept.length; 
+        //         },
+        //         set(value){
+        //             this.dept.numOfDept = value;
+        //         }
+        //     }
+        // }
+        watch:{
+            // 'dept.subDept' (val) {
+
+            //     this.numOfDept = this.dept.subDept.length;
+            // },
+            dept:{
+                immediate:true,
+                deep:true,
+                handler(){
+                    console.log(this)
+                    this.numOfDept = this.dept.subDept.length;
+                }
+            }
         }
     })
 </script>
