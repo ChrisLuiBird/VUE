@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="root">
+        <!-- 3. 引用组件 -->
+        <school></school>
+        <hr>
+        <student></student>
+    </div>
+</body>
+
+<script>
+    Vue.config.productionTip = false;
+    //1. 创建组件
+    const school = Vue.extend({
+        template: `
+            <div>{{name}} <hr>
+                
+                {{address}}
+            </div>
+        `,
+        data(){
+            return {
+                name:'city u',
+                address:'HK'
+            }
+        }
+    });
+
+    const student = {
+        template: `
+            <div>{{name}}<hr>
+                {{age}}
+            </div>
+        `,
+        data(){
+            return {
+                name:'Chris',
+                age:25
+            }
+        }
+    };
+
+    //2. 注册组件
+    new Vue({
+        el:'#root',
+        components:{
+            school,
+            student
+        }
+
+    })
+</script>
+</html>
